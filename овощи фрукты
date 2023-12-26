@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма с AJAX</title>
+    <!-- Подключение библиотеки jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Стили для формы и результата -->
+    <style>
+        .resultMessage {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+
+        #myForm label,
+        #myForm input,
+        #myForm br {
+            margin-bottom: 10px;
+        }
+
+
+        .outputText {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+
+
+<!-- Форма для ввода данных -->
+<form id="myForm">
+    <!-- Поле ввода имени -->
+    <label for="firstName">Введите имя:</label>
+    <input type="text" name="firstName" id="firstName" required>
+    <br>
+
+
+    <!-- Поле ввода фамилии -->
+    <label for="lastName">Введите фамилию:</label>
+    <input type="text" name="lastName" id="lastName" required>
+    <br>
+
+
+    <!-- Поле выбора предпочтений (овощи и/или фрукты) -->
+    <label>Предпочтение:</label>
+    <input type="checkbox" name="preference[]" value="Овощи">Овощи
+    <input type="checkbox" name="preference[]" value="Фрукты">Фрукты
+    <br>
+
+
+    <!-- Кнопки для отправки и сброса формы -->
+    <input type="button" value="Отправить" onclick="submitForm()">
+    <input type="reset" value="Сбросить">
+</form>
+
+
+<!-- Контейнер для вывода результатов -->
+<div id="resultContainer"></div>
+
+
+<!-- Скрипт для AJAX-запроса -->
+<script>
+    var outputCounter = 0;
+
+
+    function submitForm() {
+        // Получение данных из формы
+        var formData = $("#myForm").serialize();
+
+
+        // AJAX-запрос к серверу
+        $.ajax({
+            type: "POST",
+            url: "c.php",
+            data: formData,
+            success: function(response) {
+                outputCounter++;
+                // Формирование и вывод результата
+                var resultMessage = "<span class='resultMessage'><strong><span class='outputText'>Вывод " + outputCounter + ":</span></strong> " + response + "</span>";
+                $("#resultContainer").append(resultMessage);
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+PHP 
+
+<?php
+$resultMessage = "";
+
+
+// Обработка формы при отправке
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Проверка наличия данных в полях имени и фамилии
+    if (empty($_POST["firstName"]) || empty($_POST["lastName"])) {
+        $resultMessage = "<p style='color: red;'>Пожалуйста, заполните все поля.</p>";
+    } else {
+        // Проверка выбора предпочтений
+        $preferences = isset($_POST["preference"]) ? $_POST["preference"] : array();
+
+
+        // Вывод результатов
+        $firstName = $_POST["firstName"];
+        $lastName = $_POST["lastName"];
+        $resultMessage .= "<p>Имя: $firstName</p>";
+        $resultMessage .= "<p>Фамилия: $lastName</p>";
+
+
+        // Вывод предпочтений
+        if (!empty($preferences)) {
+            $resultMessage .= "<p>Предпочтения: " . implode(" и ", $preferences) . "</p>";
+        } else {
+            $resultMessage .= "<p>Предпочтение: отсутствует</p>";
+        }
+    }
+}
+
+
+echo $resultMessage;
+?>

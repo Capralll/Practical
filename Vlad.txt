@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>Recipes Information</title>
+</head>
+<body>
+    <style>
+        .recipe-container {
+            border: solid #ccc 1px;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .recipe-image {
+            max-width: 100px;
+            max-height: 150px;
+            margin: 0 auto; 
+        }
+    </style>
+    <form>
+        <input type="text" name="rec" id="rec" placeholder="Введите название рецепта">
+        <input type="button" onclick="getInfo()" value="Еда">
+    </form>
+    <div id="result"></div>
+    
+    <script type="text/javascript">
+        function getInfo() {
+            const recip = $("#rec").val();
+            const settings = {
+                async: true,
+                crossDomain: true,
+                url: `https://food-recipes-with-images.p.rapidapi.com/?q=${recip}`,
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': '4b0b1e68fdmsh40d2fdf08264ecep108ddbjsn2b4f62a96ca1',
+                    'X-RapidAPI-Host': 'food-recipes-with-images.p.rapidapi.com'
+                }
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+
+                $("#result").empty();
+                for (let food of response.d) {
+                    let title = food.Title;
+                    let inst = food.Instructions;
+                    let img = `https:${food.Image}`; 
+
+                    let html = `
+                        <div style="border: solid #ccc 1px; padding: 10px; margin: 10px;">
+                            <p>Название: ${title}</p>
+                            <p>Инструкция: ${inst}</p>
+                            <img src="${img}" alt="${title}" style="max-width: 600px; max-height: 600px; position: cent">
+                        </div>`;
+
+                    $("#result").append(html);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

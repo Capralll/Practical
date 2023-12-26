@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Стилизация тела страницы */
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      /* Добавьте любые другие стили по необходимости */
+    }
+
+
+    /* Стилизация контейнера таймера обратного отсчета */
+    .countdown-container {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      /* Добавьте любые другие стили по необходимости */
+    }
+
+
+    /* Стилизация отдельного элемента таймера */
+    .countdown-item {
+      text-align: center;
+      font-size: 3em; /* Увеличим размер шрифта для лучшей видимости */
+      /* Добавьте любые другие стили по необходимости */
+    }
+
+
+    /* Стилизация метки таймера */
+    .countdown-label {
+      text-align: center;
+      font-size: 1em;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      /* Добавьте любые другие стили по необходимости */
+    }
+
+
+    /* Стилизация разделителя между элементами таймера */
+    .container-after {
+      font-size: 3em;
+      /* Добавьте любые другие стили по необходимости */
+    }
+
+
+    /* Стилизация контейнера элемента таймера */
+    .container-element {
+      width: 100px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      /* Добавьте любые другие стили по необходимости */
+    }
+  </style>
+  <title>Таймер обратного отсчета</title>
+</head>
+<body>
+  <!-- Контейнер таймера обратного отсчета -->
+  <div class="countdown-container">
+    <!-- Контейнер для дней -->
+    <div class="container-element">
+      <div id="days" class="countdown-item"></div>
+      <div id="days-label" class="countdown-label"></div>
+    </div>
+    <!-- Разделитель -->
+    <div class="container-after">:</div>
+    <!-- Контейнер для часов -->
+    <div class="container-element">
+      <div id="hours" class="countdown-item"></div>
+      <div id="hours-label" class="countdown-label"></div>
+    </div>
+    <!-- Разделитель -->
+    <div class="container-after">:</div>
+    <!-- Контейнер для минут -->
+    <div class="container-element">
+      <div id="minutes" class="countdown-item"></div>
+      <div id="minutes-label" class="countdown-label"></div>
+    </div>
+    <!-- Разделитель -->
+    <div class="container-after">:</div>
+    <!-- Контейнер для секунд -->
+    <div class="container-element">
+      <div id="seconds" class="countdown-item"></div>
+      <div id="seconds-label" class="countdown-label"></div>
+    </div>
+  </div>
+
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Задаем дату завершения таймера
+      const countdownDate = new Date('2023-12-31T00:00:00').getTime();
+
+
+      // Функция для обновления значения таймера
+      function updateCountdown() {
+        const currentDate = new Date().getTime();
+        const difference = countdownDate - currentDate;
+
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+
+        // Обновление отображения каждой единицы таймера
+        updateElement('days', days, ['день ', 'дня ', 'дней ']);
+        updateElement('hours', hours, ['час ', 'часа ', 'часов ']);
+        updateElement('minutes', minutes, ['минута ', 'минуты ', 'минут ']);
+        updateElement('seconds', seconds, ['секунда ', 'секунды ', 'секунд ']);
+      }
+
+
+      // Обновление таймера каждую секунду
+      setInterval(updateCountdown, 1000);
+
+
+      // Инициальный вызов для отображения таймера сразу
+      updateCountdown();
+
+
+      // Функция для обновления значения отдельного элемента таймера
+      function updateElement(elementId, number, words) {
+        document.getElementById(elementId).innerHTML = number;
+        document.getElementById(elementId + '-label').innerHTML = '&nbsp;' + formatNumberWithWord(number, words);
+      }
+
+
+      // Функция для форматирования числа с соответствующим словом
+      function formatNumberWithWord(number, words) {
+        let remainder10 = number % 10;
+        let remainder100 = number % 100;
+
+
+        if (remainder10 === 1 && remainder100 !== 11) {
+          return words[0];
+        } else if ((remainder10 >= 2 && remainder10 <= 4) && !(remainder100 >= 12 && remainder100 <= 14)) {
+          return words[1];
+        } else {
+          return words[2];
+        }
+      }
+    });
+  </script>
+</body>
+</html>

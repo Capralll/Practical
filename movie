@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>3 задача</title>
+</head>
+<body>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+input[type="button"] {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="button"]:hover {
+    background-color: #45a049;
+}
+
+#result {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.movie-container {
+    border: 1px solid #ccc;
+    padding: 20px; 
+    margin: 20px; 
+    text-align: center;
+    background-color: #fff;
+    width: 250px; 
+}
+
+img {
+    max-width: 200px; 
+    max-height: 300px; 
+    margin-bottom: 15px; 
+}
+    </style>
+    <form>
+        <input type="text" name="movie_title" id="movie_title" placeholder="Введите названия фильма" size="20">
+        <input type="button" onclick="getInfo()" value="Поиск фильма">
+    </form>
+    <div id="result"></div>
+
+    <script type="text/javascript">
+        function getInfo() {
+            const title = $("#movie_title").val();
+
+            const settings = {
+                async: true,
+                crossDomain: true,
+                url: `https://imdb8.p.rapidapi.com/auto-complete?q=${title}`,
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': '4b0b1e68fdmsh40d2fdf08264ecep108ddbjsn2b4f62a96ca1',
+		            'X-RapidAPI-Host': 'imdb8.p.rapidapi.com'
+                }
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                $("#result").empty();
+
+                for (let movie of response["d"]) {
+                    let title = movie["l"];
+                    let year = movie["y"];
+                    let imageUrl = movie["i"]["imageUrl"];
+                    let cast = movie["s"];
+
+                    let html = `
+                        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+                            <img src="${imageUrl}" alt="${title}" style="max-width: 100px; max-height: 150px;">
+                            <p>Name: ${title}</p>
+                            <p>Released: ${year}</p>
+                            <p>Cast: ${cast}</p>
+                        </div>
+                    `;
+                    $("#result").append(html);
+                }
+            });
+        };
+    </script>
+</body>
+</html>

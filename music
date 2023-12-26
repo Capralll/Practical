@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billboard API Example</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        #apiData {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .apiEntry {
+            display: flex;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .apiText {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .apiText p {
+            margin: 0;
+        }
+
+        .apiImage img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        hr {
+            margin: 10px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="apiData"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const settings = {
+            async: true,
+            crossDomain: true,
+            url: 'https://billboard2.p.rapidapi.com/billboard_global_200?date=2020-09-19',
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': '4b0b1e68fdmsh40d2fdf08264ecep108ddbjsn2b4f62a96ca1',
+                'X-RapidAPI-Host': 'billboard2.p.rapidapi.com'
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            displayApiData(response);
+        });
+    });
+
+    function displayApiData(data) {
+        const apiDataElement = $('#apiData');
+        data.forEach(function (entry, index) {
+            const entryElement = $('<div class="apiEntry"></div>');
+            entryElement.html(`<div class="apiText">
+                                   <p><strong>${index + 1}:</strong> ${entry.artist} - ${entry.title}</p>
+                                   <p><strong>Rank:</strong> ${entry.rank}</p>
+                                   <p><strong>Peak Position:</strong> ${entry.peak_position}</p>
+                                   <p><strong>Weeks on Chart:</strong> ${entry.weeks_on_chart}</p>
+                                   <hr>
+                                </div>
+                               <div class="apiImage">
+                                   <img src="${entry.image}" alt="${entry.title}">
+                               </div>`);
+            apiDataElement.append(entryElement);
+        });
+    }
+</script>
+</body>
+</html>

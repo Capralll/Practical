@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Устанавливаем кодировку документа -->
+    <meta charset="UTF-8">
+    <!-- Указываем совместимость с IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Задаем параметры отображения на мобильных устройствах -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Определяем стили для страницы -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+
+
+
+        .accordion {
+            width: 300px;
+            margin: 20px;
+            background-color: #28d233;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+
+        .menu-item {
+            cursor: pointer;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+
+
+
+        .submenu {
+            display: none;
+            margin-left: 10px;
+        }
+
+
+
+
+        .submenu li {
+            list-style-type: none;
+            padding: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+
+
+
+        .submenu li:hover {
+            background-color: #28d233;
+        }
+
+
+
+
+        .menu-item:hover {
+            background-color: #28d233;
+        }
+    </style>
+    <!-- Устанавливаем заголовок страницы -->
+    <title>Accordion Menu</title>
+</head>
+<body>
+
+
+
+
+<!-- Создаем аккордеонное меню -->
+<div class="accordion">
+    <!-- Пункт "Акции" -->
+    <div class="menu-item">Акции
+        <!-- Подменю "Акции" -->
+        <ul class="submenu">
+            <li>На кассе</li>
+            <li>Продукты питания</li>
+            <li>Бытовая химия</li>
+        </ul>
+    </div>
+    <img src="" alt="">
+
+
+
+
+    <!-- Пункт "Рейтинг товаров" -->
+    <div class="menu-item">Рейтинг товаров
+        <!-- Подменю "Рейтинг товаров" -->
+        <ul class="submenu">
+            <li>Что нового</li>
+            <li>Товары с высоким рейтингом</li>
+            <li>Постоянным покупателям</li>
+        </ul>
+    </div>
+
+
+
+
+    <!-- Пункт "Магазины" -->
+    <div class="menu-item">Магазины
+        <!-- Подменю "Магазины" -->
+        <ul class="submenu">
+            <!-- Подпункт "Москва" -->
+            <li class="menu-item">Москва
+                <!-- Подподменю "Москва" -->
+                <ul class="submenu">
+                    <li>Авиапарк</li>
+                    <li>Ривьера</li>
+                    <li>Европа</li>
+                </ul>
+            </li>
+            <!-- Подпункт "Московская область" -->
+            <li class="menu-item">Московская область
+                <!-- Подподменю "Московская область" -->
+                <ul class="submenu">
+                    <!-- Подподпункт "Зеленоград" -->
+                    <li class="menu-item">Зеленоград
+                        <!-- Подподподменю "Зеленоград" -->
+                        <ul class="submenu">
+                            <li>Столица</li>
+                            <li>Панфиловский</li>
+                        </ul>
+                    </li>
+                    <li>Балашиха</li>
+                    <li>Королев</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+<!-- Добавляем скрипт для обработки событий после загрузки документа -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Выбираем все элементы с классом 'menu-item'
+        var menuItems = document.querySelectorAll('.menu-item');
+
+
+
+
+        // Для каждого элемента 'menu-item' устанавливаем обработчик события 'click'
+        menuItems.forEach(function (item) {
+            item.addEventListener('click', function (event) {
+                // Получаем подменю текущего элемента
+                var submenu = this.querySelector('.submenu');
+                // Если подменю существует, то переключаем его отображение
+                if (submenu) {
+                    submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';
+                    // Останавливаем всплытие события, чтобы избежать его обработки выше по иерархии
+                    event.stopPropagation();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
